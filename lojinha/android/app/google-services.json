@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "510463871766",
+    "project_id": "flutter-loja-c8373",
+    "storage_bucket": "flutter-loja-c8373.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510463871766:android:38fea60aa2c23329c15e37",
+        "android_client_info": {
+          "package_name": "br.com.larissanunes.lojinha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510463871766-vbsoovtutsdlt8brlqgv0uk0tm4dpajo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyRO2CsYI4OyU6skZHrZJmUssyj4lsWyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510463871766-vbsoovtutsdlt8brlqgv0uk0tm4dpajo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "510463871766-c92m0sresn89j7j5gp52iqidht4olfgl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.larissanunes.lojinha"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
