@@ -41,7 +41,7 @@ class ProductTile extends StatelessWidget {
                       children: [
                         Text(
                           product.title,
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12),
                         ),
                         //toStringAsFixed pra deixar com duas casas decimais depois da ,
                         Text(
@@ -50,6 +50,7 @@ class ProductTile extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               fontSize: 17,
                               fontWeight: FontWeight.bold),
+                          maxLines: 3,
                         ),
                       ],
                     ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lojinha/models/userModel.dart';
+import 'package:lojinha/screens/loginScreen.dart';
 import 'package:lojinha/tiles/drawerTile.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class CustomDrawer extends StatelessWidget {
-
   final PageController pageController;
-
 
   CustomDrawer(this.pageController);
 
@@ -55,25 +56,36 @@ class CustomDrawer extends StatelessWidget {
                     Positioned(
                       left: 0,
                       bottom: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Olá,',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          GestureDetector(
-                            child: Text(
-                              'Entre ou Cadastre-se',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            onTap: (){},
-                          ),
-                        ],
+                      child: ScopedModelDescendant<UserModel>(
+                        builder: (context,child,model){
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Olá, ${!model.isLoggedIn() ? "" : model.userData['name']}',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                child: Text(!model.isLoggedIn() ?
+                                  'Entre ou Cadastre-se' : "Sair",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onTap: () {
+                                  if(!model.isLoggedIn())
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => LoginScreen())
+                                  );
+                                  else
+                                    model.signOut();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     )
                   ],
@@ -81,10 +93,11 @@ class CustomDrawer extends StatelessWidget {
               ),
               Divider(),
               //os numero pra saber qual pagina é qual
-              DrawerTile(Icons.home, "Início", pageController,0),
-              DrawerTile(Icons.list, "Produtos", pageController,1),
-              DrawerTile(Icons.location_on, "Lojas", pageController,2),
-              DrawerTile(Icons.playlist_add_check, "Meus pedidos", pageController,3),
+              DrawerTile(Icons.home, "Início", pageController, 0),
+              DrawerTile(Icons.list, "Produtos", pageController, 1),
+              DrawerTile(Icons.location_on, "Lojas", pageController, 2),
+              DrawerTile(
+                  Icons.playlist_add_check, "Meus pedidos", pageController, 3),
             ],
           ),
         ],
