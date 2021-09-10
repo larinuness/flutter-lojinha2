@@ -71,10 +71,9 @@ class HomeTab extends StatelessWidget {
                     children: snapshot.data!.docs.map((doc) {
                       //Fade pra vir de forma mais natural
                       return FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: doc['image'],
-                        fit: BoxFit.cover
-                      );
+                          placeholder: kTransparentImage,
+                          image: doc['image'],
+                          fit: BoxFit.cover);
                     }).toList(),
                   );
               },

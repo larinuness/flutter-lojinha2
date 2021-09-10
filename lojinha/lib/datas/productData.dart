@@ -18,4 +18,13 @@ class ProductData {
     images = snapshot['images'];
     sizes = snapshot['sizes'];
   }
+  
+  //função que resume as informações que queremos mostrar nos pedidos
+  Map<String, dynamic> toResumedMap() {
+    return {
+      'title': title,
+      'description': description,
+      'price': price,
+    };
+  }
 }

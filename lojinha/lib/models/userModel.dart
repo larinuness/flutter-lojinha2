@@ -1,83 +1,100 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-//Model objeto que vai guarda os estados do app
-//vai ter estados e as funções que muda os estados
 class UserModel extends Model {
-  //classe do userAtual
+  //model é um objeto que vai guardar os estados de alguma coisa
+  //nesse caso vai armazenar o usuário atual e ter todas as funções que vão modificar o estado atual
 
   FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser
 
-  //pega os dados mais importante do user, nome, email, senha e endereço
+  User? firebaseUser;
+
+  //vai abrigar os dados do usuário
   Map<String, dynamic> userData = Map();
 
-  //se vai está processando algo
+  //variável que vai indicar quando o UserModel tá processando algo
   bool isLoading = false;
 
-  //função pra fazer cadastro
-  //está em {} mas é obrigatorio, porém agora não importa a ordem
+  //método que vai me permitir acessar o userModel de qualquer lugar do app
+  static UserModel of(BuildContext context) =>
+      ScopedModel.of<UserModel>(context);
+
+  //voidCallback, função que vamos passar e ela será chamada dentro da função
   void signUp(
       {required Map<String, dynamic> userData,
       required String pass,
       required VoidCallback onSuccess,
-      required VoidCallback onFail}) {
-    //primeiro está carregando
+      required VoidCallback onFail}) async {
     isLoading = true;
-    //notifica o usuario
     notifyListeners();
-    //tenta criar user
-    _auth
-        .createUserWithEmailAndPassword(
-      email: userData['email'],
-      password: pass,
-      //se funcionar vai pro then, se não pro catch
-    )
-        .then((user) async {
-      //salve o user
-      firebaseUser = user as User;
-      //salva os dados do user
+
+    try {
+      UserCredential teste = await _auth.createUserWithEmailAndPassword(
+          email: userData['email'], password: pass);
+
+      //aqui tentamos criar nosso usuário
+      //depois que processar isso, vai chamar a função
+      firebaseUser = teste.user;
+
+      //para salvar os dados no firestore
       await _saveUserData(userData);
+
       onSuccess();
       isLoading = false;
       notifyListeners();
-    }).catchError((e) {
+    } catch (e) {
       onFail();
       isLoading = false;
       notifyListeners();
-    });
+    }
   }
 
-  //função pra fazer login
   void signIn(
       {required String email,
       required String pass,
       required VoidCallback onSuccess,
       required VoidCallback onFail}) async {
     isLoading = true;
-    //avisa que teve mudança
+    //para mostrar que modificou algo no modelo e que a view precisa ser atualizada usamos o notify
+    //o notify vai recriar tudo que estiver dentro do scopedmodeldescendant
     notifyListeners();
-    _auth.signInWithEmailAndPassword(email: email, password: pass).then((user){
-      firebaseUser = user as User?;
+
+    try {
+      UserCredential teste =
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
+      firebaseUser = teste.user;
+
+      await _loadCurrentUser();
 
       onSuccess();
       isLoading = false;
       notifyListeners();
-    }).catchError((e) {
+    } catch (e) {
       onFail();
       isLoading = false;
       notifyListeners();
-    });
+    }
   }
 
-  //funçaõ pra recuperar senha
-  void recoverPass() {}
+  void signOut() async {
+    await _auth.signOut();
 
-  //salva o user data
-  Future _saveUserData(Map<String, dynamic> userData) async {
-    //passa o user data da função para o atributo(map) lá em cima
+    userData = Map();
+    firebaseUser = null;
+
+    notifyListeners();
+  }
+
+  void recoverPass(String email) {
+    //função do firebase para recuperação de senha
+    _auth.sendPasswordResetEmail(email: email);
+  }
+
+  //usamos _ para funções internas
+  //salvamos os dados na coleção users no documento correspondente ao id do usuário
+  Future<Null> _saveUserData(Map<String, dynamic> userData) async {
     this.userData = userData;
     await FirebaseFirestore.instance
         .collection('users')
@@ -85,18 +102,26 @@ class UserModel extends Model {
         .set(userData);
   }
 
-  //função se está logado ou não
+  //se o firebaseUser for diferente de nulo ele vai retornar true indicando que tem um usuário logado
   bool isLoggedIn() {
     return firebaseUser != null;
   }
 
-  void signOut() async {
-    await _auth.signOut();
-    userData = Map();
-    firebaseUser = null;
-  }
-//função pra saber se está logado
-/*bool isLoggedIn(){
-  }*/
+  //função para pegar os dados do usuário do banco de dados
+  Future<Null> _loadCurrentUser() async {
+    //verifica se o usuário é nulo e se for o caso, ou seja, não tenho nenhum usuário já logado, vou tentar pegar os dados do usuário atual
+    if (firebaseUser == null) firebaseUser = _auth.currentUser;
 
+    //se ele for diferente de nulo quer dizer que logou, então vou pegar os dados
+    if (firebaseUser != null) {
+      if (userData['name'] == null) {
+        DocumentSnapshot docUser = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(firebaseUser!.uid)
+            .get();
+        userData = docUser.data() as Map<String, dynamic>;
+      }
+    }
+    notifyListeners();
+  }
 }
