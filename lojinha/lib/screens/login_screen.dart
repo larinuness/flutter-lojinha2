@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lojinha/models/userModel.dart';
-import 'package:lojinha/screens/signupScreen.dart';
+import 'package:lojinha/models/user_model.dart';
+import 'package:lojinha/screens/signup_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -136,12 +136,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _onFail() {
+  void _onSuccess() {
+    //em caso de sucesso no login ele volta para a página inicial
     Navigator.of(context).pop();
   }
 
-  void _onSuccess() {
-    _scaffoldKey.currentState?.showSnackBar(SnackBar(
+  void _onFail() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Falha ao entrar!"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),

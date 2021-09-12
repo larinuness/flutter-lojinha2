@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lojinha/screens/categoryScreen.dart';
+import 'package:lojinha/screens/category_screen.dart';
 
 class CategoryTile extends StatelessWidget {
   final DocumentSnapshot snapshot;

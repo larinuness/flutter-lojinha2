@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lojinha/tabs/homeTab.dart';
-import 'package:lojinha/tabs/productsTab.dart';
-import 'package:lojinha/widgets/customDrawer.dart';
+import 'package:lojinha/tabs/home_tab.dart';
+import 'package:lojinha/tabs/products_tab.dart';
+import 'package:lojinha/widgets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   final _pageController = PageController();

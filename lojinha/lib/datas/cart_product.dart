@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lojinha/datas/productData.dart';
+import 'package:lojinha/datas/product_data.dart';
 
 class CartProduct {
   late String cid;
@@ -8,8 +8,10 @@ class CartProduct {
   late int quantity;
   late String size;
 
-  late ProductData productData;
- 
+  ProductData? productData;
+
+  CartProduct();
+
   //transforma em um cartProduct
   CartProduct.fromDocument(DocumentSnapshot document) {
     cid = document.id;
@@ -18,7 +20,7 @@ class CartProduct {
     quantity = document['quantity'];
     size = document['size'];
   }
-  
+
   //add no branco
   Map<String, dynamic> toMap() {
     return {
@@ -27,7 +29,7 @@ class CartProduct {
       'quantity': quantity,
       'size': size,
       //aqui vamos armazear só um resumo do produto porque no acompanhamento dos pedidos quero um resumo de cada um dos produtos
-      'product': productData.toResumedMap(),
+      'product': productData!.toResumedMap(),
     };
   }
 }

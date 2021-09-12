@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lojinha/models/userModel.dart';
-import 'package:lojinha/screens/loginScreen.dart';
-import 'package:lojinha/tiles/drawerTile.dart';
+import 'package:lojinha/models/user_model.dart';
+import 'package:lojinha/screens/login_screen.dart';
+import 'package:lojinha/tiles/drawer_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CustomDrawer extends StatelessWidget {

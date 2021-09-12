@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lojinha/datas/productData.dart';
-import 'package:lojinha/tiles/productTile.dart';
+import 'package:lojinha/datas/product_data.dart';
+import 'package:lojinha/tiles/product_tile.dart';
 
 class CategoryScreen extends StatelessWidget {
   //recebe o id da categoria e o titulo

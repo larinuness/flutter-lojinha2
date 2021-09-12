@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lojinha/models/userModel.dart';
+import 'package:lojinha/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,7 +13,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _addressController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSuccess() {
-    _scaffoldKey.currentState?.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Usuário criado com sucesso!"),
       backgroundColor: Theme.of(context).primaryColor,
       duration: Duration(seconds: 2),
@@ -138,8 +137,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onFail() {
-    _scaffoldKey.currentState?.showSnackBar(SnackBar(
-      content: Text("Falha ao entrar!"),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Falha ao criar usuário!"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),
     ));
