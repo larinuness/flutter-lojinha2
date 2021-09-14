@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lojinha/tabs/home_tab.dart';
+import 'package:lojinha/tabs/orders_tab.dart';
+import 'package:lojinha/tabs/places_tab.dart';
 import 'package:lojinha/tabs/products_tab.dart';
+import 'package:lojinha/widgets/cart_button.dart';
 import 'package:lojinha/widgets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,22 +11,43 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //desliga entre telas
+    //pageView permite arrastar de uma página para outra, mas podemos evitar que o usuário possa arrastar
     return PageView(
       controller: _pageController,
-      //não deixa da scrooll no pageview
+      //evita que a página seja arrastada para o lado
       physics: NeverScrollableScrollPhysics(),
       children: [
+        //componentizando os elementos da página
         Scaffold(
           body: HomeTab(),
+          //menu lateral para navegação
           drawer: CustomDrawer(_pageController),
+          floatingActionButton: CartButton(),
         ),
         Scaffold(
           appBar: AppBar(
             title: Text('Produtos'),
+            centerTitle: true,
           ),
           drawer: CustomDrawer(_pageController),
           body: ProductsTab(),
+          floatingActionButton: CartButton(),
+        ),
+        Scaffold(
+          appBar: AppBar(
+            title: Text('Lojas'),
+            centerTitle: true,
+          ),
+          drawer: CustomDrawer(_pageController),
+          body: PlacesTab(),
+        ),
+        Scaffold(
+          appBar: AppBar(
+            title: Text('Meus Pedidos'),
+            centerTitle: true,
+          ),
+          drawer: CustomDrawer(_pageController),
+          body: OrdersTab(),
         ),
       ],
     );

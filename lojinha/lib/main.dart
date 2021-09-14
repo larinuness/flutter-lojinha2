@@ -7,7 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/cart_model.dart';
 import 'models/user_model.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           return ScopedModel<CartModel>(
             model: CartModel(model),
             child: MaterialApp(
-              title: "Jade's Clothing",
+              title: "Larissa",
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 primaryColor: Color.fromARGB(255, 4, 125, 141),
@@ -41,5 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

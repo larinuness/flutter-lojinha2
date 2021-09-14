@@ -2,29 +2,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductData {
-  late String id;
-  late String title;
-  late String description;
+  String? category;
+
+  String? id;
+  String? title;
+  String? description;
   late double price;
-  late List images;
-  late List sizes;
-  late String category;
-  //função que vai receber os dados do firebase
+  List? images;
+  List? sizes;
+
+  //pegamos o documento no firebase e transformamos nesses dados citados acima para criar o Product Data
   ProductData.fromDocument(DocumentSnapshot snapshot) {
     id = snapshot.id;
     title = snapshot['title'];
     description = snapshot['description'];
-    price = snapshot['price'];
+    price = 0.0 + snapshot['price'];
     images = snapshot['images'];
     sizes = snapshot['sizes'];
-  }
-  
+  } //convertendo os dados do documento para os dados da nossa classe
+
   //função que resume as informações que queremos mostrar nos pedidos
   Map<String, dynamic> toResumedMap() {
-    return {
-      'title': title,
-      'description': description,
-      'price': price,
-    };
+    return {'title': title, 'description': description, 'price': price};
   }
 }

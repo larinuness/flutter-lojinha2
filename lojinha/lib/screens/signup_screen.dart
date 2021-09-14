@@ -2,126 +2,122 @@ import 'package:flutter/material.dart';
 import 'package:lojinha/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  //key para usarmos o scaffold dentro da função success e fail
+  final _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
   final _nameController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+  final _adressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Criar Conta'),
-        centerTitle: true,
-      ),
-      body: ScopedModelDescendant<UserModel>(
-        builder: (context, child, model) {
-          if (model.isLoading)
-            return Center(child: CircularProgressIndicator());
-          return Form(
-            key: _formKey,
-            child: ListView(
-              padding: EdgeInsets.all(16),
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  validator: (text) {
-                    if (text!.isEmpty) return 'Nome inválido';
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'Nome completo',
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  controller: _emailController,
-                  validator: (text) {
-                    if (text!.isEmpty || !text.contains('@'))
-                      return 'E-mail inválido';
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'E-mail',
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      hintText: 'Senha',
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                  obscureText: true,
-                  validator: (text) {
-                    if (text!.isEmpty || text.length < 6)
-                      return 'Senha inválida';
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _addressController,
-                  decoration: InputDecoration(
-                      hintText: 'Endereço',
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                  validator: (text) {
-                    if (text!.isEmpty) return 'Endereço inválido';
-                  },
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //senha vai ser salve em outro lugar, por isso não está ai
-                        Map<String, dynamic> userData = {
-                          'name': _nameController.text,
-                          'email': _emailController.text,
-                          'address': _addressController.text
-                        };
-                        model.signUp(
-                            userData: userData,
-                            pass: _passwordController.text,
-                            onSuccess: _onSuccess,
-                            onFail: _onFail);
-                      }
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Criar Conta'),
+          centerTitle: true,
+        ),
+        body: ScopedModelDescendant<UserModel>(
+          builder: (context, child, model) {
+            if (model.isLoading)
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+
+            return Form(
+              key: _formKey,
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(hintText: 'Nome Completo'),
+                    validator: (text) {
+                      if (text!.isEmpty) return 'Nome inválido!';
                     },
-                    child: Text(
-                      'Criar Conta',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
-    );
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(hintText: 'E-mail'),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (text) {
+                      if (text!.isEmpty || !text.contains('@'))
+                        return 'Email inválido!';
+                    },
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  TextFormField(
+                    controller: _passController,
+                    decoration: InputDecoration(hintText: 'Senha'),
+                    //não mostra a senha digitada
+                    obscureText: true,
+                    validator: (text) {
+                      if (text!.isEmpty || text.length < 6)
+                        return 'Senha inválida!';
+                    },
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  TextFormField(
+                    controller: _adressController,
+                    decoration: InputDecoration(hintText: 'Endereço'),
+                    validator: (text) {
+                      if (text!.isEmpty) return 'Endereço inválido!';
+                    },
+                  ),
+                  //usamos o align para alinhar o botão
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  //usamos sizedbox aqui para deixar o botão mais alto
+                  SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //aqui pedimos para validar nossos campos
+                        if (_formKey.currentState!.validate()) {
+                          //salvamos os dados do usuário em um userData, a senha não é armazenada junto com as informações do usuário
+                          Map<String, dynamic> userData = {
+                            'name': _nameController.text,
+                            'email': _emailController.text,
+                            'adress': _adressController.text,
+                          };
+
+                          model.signUp(
+                              userData: userData,
+                              pass: _passController.text,
+                              onSuccess: _onSuccess,
+                              onFail: _onFail);
+                        }
+                      },
+                      child: Text(
+                        'Criar Conta',
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ));
   }
 
   void _onSuccess() {
@@ -144,3 +140,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
     ));
   }
 }
+
+
